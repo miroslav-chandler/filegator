@@ -16,6 +16,10 @@ const app = createApp(App)
 
 app.config.productionTip = false
 
+// Buefy expects Vue 2 style prototype object. Map Vue 3 global properties so
+// plugin install doesn't fail.
+app.prototype = app.config.globalProperties
+
 /* eslint-disable-next-line */
 app.config.baseURL = process.env.VUE_APP_API_ENDPOINT ? process.env.VUE_APP_API_ENDPOINT : window.location.origin+window.location.pathname+'?r='
 
