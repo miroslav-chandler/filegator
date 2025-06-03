@@ -1,4 +1,4 @@
-import { createApp } from '@vue/compat'
+import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store'
@@ -13,7 +13,6 @@ import '@fortawesome/fontawesome-free/css/fontawesome.css'
 //TODO: import './registerServiceWorker'
 
 const app = createApp(App)
-app.config.compatConfig = { MODE: 2 }
 
 app.config.productionTip = false
 

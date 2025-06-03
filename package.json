@@ -39,7 +39,6 @@
     "vue": "^3.2.0",
     "vue-router": "^4.1.0",
     "vuex": "^4.0.0",
-    "@vue/compiler-sfc": "^3.2.0",
-    "@vue/compat": "^3.2.0"
+    "@vue/compiler-sfc": "^3.2.0"
   }
 }
