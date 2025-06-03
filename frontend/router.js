@@ -1,15 +1,10 @@
-import Vue from 'vue'
-import Router from 'vue-router'
+import { createRouter, createWebHashHistory } from 'vue-router'
 import Browser from './views/Browser.vue'
 import Users from './views/Users.vue'
 import Login from './views/Login.vue'
 import store from './store'
 
-Vue.use(Router)
-
-export default new Router({
-  mode: 'hash',
-  routes: [
+const routes = [
     {
       path: '/',
       name: 'browser',
@@ -30,5 +25,11 @@ export default new Router({
         }
       },
     },
-  ]
+]
+
+const router = createRouter({
+  history: createWebHashHistory(),
+  routes
 })
+
+export default router

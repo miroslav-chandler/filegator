@@ -147,7 +147,7 @@
                 <b-dropdown-item v-if="can('write')" aria-role="listitem" @click="remove($event, props.row)">
                   <b-icon icon="trash-alt" size="is-small" /> {{ lang('Delete') }}
                 </b-dropdown-item>
-                <b-dropdown-item v-if="props.row.type == 'file' && can('download')" v-clipboard:copy="getDownloadLink(props.row.path)" aria-role="listitem">
+                <b-dropdown-item v-if="props.row.type == 'file' && can('download')" aria-role="listitem" @click="copyLink(props.row.path)">
                   <b-icon icon="clipboard" size="is-small" /> {{ lang('Copy link') }}
                 </b-dropdown-item>
               </b-dropdown>
@@ -170,7 +170,6 @@
 </template>
 
 <script>
-import Vue from 'vue'
 import Menu from './partials/Menu'
 import Tree from './partials/Tree'
 import Permissions from './partials/Permissions'
@@ -180,10 +179,7 @@ import Search from './partials/Search'
 import Pagination from './partials/Pagination'
 import Upload from './partials/Upload'
 import api from '../api/api'
-import VueClipboard from 'vue-clipboard2'
 import _ from 'lodash'
-
-Vue.use(VueClipboard)
 
 export default {
   name: 'Browser',
@@ -424,7 +420,7 @@ export default {
             message: this.lang('Your file is ready'),
             confirmText: this.lang('Download'),
             onConfirm: () => {
-              window.open(Vue.config.baseURL+'/batchdownload&uniqid='+ret.uniqid, '_blank')
+              window.open(this.$baseURL+'/batchdownload&uniqid='+ret.uniqid, '_blank')
             }
           })
         })
@@ -435,6 +431,21 @@ export default {
     },
     download(item) {
       window.open(this.getDownloadLink(item.path), '_blank')
+    },
+    copyLink(path) {
+      navigator.clipboard.writeText(this.getDownloadLink(path)).then(() => {
+        this.$toast.open({
+          message: this.lang('Copied to clipboard'),
+          type: 'is-success',
+          duration: 2000,
+        })
+      }).catch(() => {
+        this.$toast.open({
+          message: this.lang('Copy failed'),
+          type: 'is-danger',
+          duration: 2000,
+        })
+      })
     },
     search() {
       this.$modal.open({

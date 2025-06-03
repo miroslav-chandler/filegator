@@ -35,6 +35,8 @@ const data = {
   'Delete': 'Delete',
   'Download': 'Download',
   'Copy link': 'Copy link',
+  'Copied to clipboard': 'Copied to clipboard',
+  'Copy failed': 'Copy failed',
   'Done': 'Done',
   'File': 'File',
   'Drop files to upload': 'Drop files to upload',
