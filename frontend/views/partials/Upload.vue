@@ -109,7 +109,10 @@ export default {
       return
     }
 
-    this.resumable.assignDrop(document.getElementById('dropzone'))
+    const dropElement = document.getElementById('dropzone')
+    if (dropElement) {
+      this.resumable.assignDrop(dropElement)
+    }
 
     this.resumable.on('fileAdded', (file) => {
       this.visible = true
