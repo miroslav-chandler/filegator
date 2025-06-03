@@ -1,4 +1,4 @@
-import Vue from 'vue'
+import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store'
@@ -9,34 +9,55 @@ import api from './api/api'
 import VueLazyload from 'vue-lazyload'
 import '@fortawesome/fontawesome-free/css/all.css'
 import '@fortawesome/fontawesome-free/css/fontawesome.css'
+import Notification from './plugins/notification'
 
 //TODO: import './registerServiceWorker'
 
-Vue.config.productionTip = false
+const app = createApp(App)
+
+// Provide Vue 2 style `_self` property for legacy components like Buefy
+app.mixin({
+  beforeCreate() {
+    this._self = this
+  }
+})
+
+app.config.productionTip = false
+
+// Buefy expects Vue 2 style prototype object. Map Vue 3 global properties so
+// plugin install doesn't fail.
+app.prototype = app.config.globalProperties
+// Some Buefy internals reference the global Vue variable. Provide a minimal
+// shim so those references don't throw in Vue 3.
+window.Vue = { prototype: app.config.globalProperties }
+
+// Provide a minimal notification plugin used throughout the app
+app.use(Notification)
 
 /* eslint-disable-next-line */
-Vue.config.baseURL = process.env.VUE_APP_API_ENDPOINT ? process.env.VUE_APP_API_ENDPOINT : window.location.origin+window.location.pathname+'?r='
+app.config.baseURL = process.env.VUE_APP_API_ENDPOINT ? process.env.VUE_APP_API_ENDPOINT : window.location.origin+window.location.pathname+'?r='
+
+app.config.globalProperties.$baseURL = app.config.baseURL
 
 axios.defaults.withCredentials = true
-axios.defaults.baseURL = Vue.config.baseURL
+axios.defaults.baseURL = app.config.baseURL
 
 axios.defaults.headers['Content-Type'] = 'application/json'
 
-Vue.use(Buefy, {
+app.use(Buefy, {
   defaultIconPack: 'fas',
 })
 
-Vue.use(VueLazyload, {
+app.use(VueLazyload, {
   preLoad: 1.3,
 })
 
+app.mixin(shared)
+app.use(router)
+app.use(store)
 
-Vue.mixin(shared)
-
-new Vue({
-  router,
-  store,
-  created: function() {
+app.mixin({
+  created() {
 
     api.getConfig()
       .then(ret => {
@@ -64,6 +85,7 @@ new Vue({
           indefinite: true,
         })
       })
-  },
-  render: h => h(App),
-}).$mount('#app')
+  }
+})
+
+app.mount('#app')
