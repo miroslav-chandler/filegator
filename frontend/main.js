@@ -9,6 +9,7 @@ import api from './api/api'
 import VueLazyload from 'vue-lazyload'
 import '@fortawesome/fontawesome-free/css/all.css'
 import '@fortawesome/fontawesome-free/css/fontawesome.css'
+import Notification from './plugins/notification'
 
 //TODO: import './registerServiceWorker'
 
@@ -29,6 +30,9 @@ app.prototype = app.config.globalProperties
 // Some Buefy internals reference the global Vue variable. Provide a minimal
 // shim so those references don't throw in Vue 3.
 window.Vue = { prototype: app.config.globalProperties }
+
+// Provide a minimal notification plugin used throughout the app
+app.use(Notification)
 
 /* eslint-disable-next-line */
 app.config.baseURL = process.env.VUE_APP_API_ENDPOINT ? process.env.VUE_APP_API_ENDPOINT : window.location.origin+window.location.pathname+'?r='
