@@ -14,6 +14,13 @@ import '@fortawesome/fontawesome-free/css/fontawesome.css'
 
 const app = createApp(App)
 
+// Provide Vue 2 style `_self` property for legacy components like Buefy
+app.mixin({
+  beforeCreate() {
+    this._self = this
+  }
+})
+
 app.config.productionTip = false
 
 // Buefy expects Vue 2 style prototype object. Map Vue 3 global properties so
