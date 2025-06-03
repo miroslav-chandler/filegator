@@ -10,5 +10,9 @@ module.exports = {
         './frontend/main.js'
       ]
     }
+    config.resolve = config.resolve || {}
+    config.resolve.alias = Object.assign({}, config.resolve.alias, {
+      'vue': '@vue/compat'
+    })
   }
 }
